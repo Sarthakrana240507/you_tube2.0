@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useRouter } from "next/router";
 
-const socket = io("http://localhost:4000");
+const socket = io(process.env.NEXT_PUBLIC_VOIP_URL || "http://localhost:4000");
 
 export default function OnlineFriends() {
   const router = useRouter();

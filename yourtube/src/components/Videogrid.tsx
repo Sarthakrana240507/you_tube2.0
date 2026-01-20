@@ -16,7 +16,8 @@ const Videogrid = () => {
     const fetchVideos = async () => {
       try {
         // ✅ FIX: Correct backend API URL
-        const res = await fetch("http://localhost:5050/video");
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5050";
+        const res = await fetch(`${API_URL}/video`);
 
         if (!res.ok) {
           throw new Error("Failed to fetch videos");
