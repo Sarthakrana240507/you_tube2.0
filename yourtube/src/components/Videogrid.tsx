@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Videocard from "./videocard";
+import axiosInstance from "@/lib/axiosinstance";
 
 type Video = {
   _id: string;
@@ -15,15 +16,8 @@ const Videogrid = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        // ✅ FIX: Correct backend API URL
-        const API_URL = process.env.BACKEND_URL || "http://localhost:5050";
-        const res = await fetch(`${API_URL}/video`);
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch videos");
-        }
-
-        const data = await res.json();
+        const res = await axiosInstance.get("/video");
+        const data = res.data;
 
         // ✅ Always ensure array
         setVideos(Array.isArray(data) ? data : []);

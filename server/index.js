@@ -28,9 +28,10 @@ connectDB();
 const app = express();
 
 /* ===== Middleware ===== */
-// 🚀 SUPER FIX: Open CORS for all origins to ensure Vercel works 100%
 app.use(cors({
   origin: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
 
