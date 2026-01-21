@@ -15,6 +15,34 @@ router.get("/allvideos", getallvideo); // keeping this as an option
    ADD VIDEO (Fixed)
    POST /video/add
 ========================= */
+
+// REPAIR ROUTE: Fixes negative likes/dislikes
+router.get("/fix-counts", async (req, res) => {
+  try {
+    const Like = (await import("../models/like.js")).default;
+    const Dislike = (await import("../models/Dislike.js")).default;
+
+    const videos = await Video.find();
+    let updatedCount = 0;
+
+    for (const vid of videos) {
+      const likeCount = await Like.countDocuments({ videoid: vid._id });
+      const dislikeCount = await Dislike.countDocuments({ videoid: vid._id });
+
+      vid.Like = likeCount;
+      vid.Dislike = dislikeCount;
+      await vid.save();
+      updatedCount++;
+    }
+
+    console.log(`✅ Fixed likes/dislikes for ${updatedCount} videos.`);
+    return res.status(200).json({ message: `Fixed counts for ${updatedCount} videos` });
+  } catch (error) {
+    console.error("Fix counts error:", error);
+    return res.status(500).json({ message: error.message });
+  }
+});
+
 router.post("/add", async (req, res) => {
   try {
     const { title, videoUrl, userId, language } = req.body;
@@ -93,7 +121,7 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ message: "Video not found in database" });
     }
 
-   
+
     video.videoUrl = video.videoUrl?.replace(/"/g, "").trim() || "";
 
     return res.status(200).json(video);
