@@ -93,7 +93,7 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ message: "Video not found in database" });
     }
 
-    // 3. Sanitize URL before sending
+   
     video.videoUrl = video.videoUrl?.replace(/"/g, "").trim() || "";
 
     return res.status(200).json(video);

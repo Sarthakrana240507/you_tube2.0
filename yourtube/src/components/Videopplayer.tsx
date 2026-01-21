@@ -10,6 +10,7 @@ interface VideoPlayerProps {
     title?: string;
     videotitle?: string;
     videoUrl?: string;
+    filepath?: string;
   };
   relatedVideos?: { _id: string }[];
   onShowComments?: () => void;
@@ -38,7 +39,12 @@ export default function Videopplayer({ video, relatedVideos = [], onShowComments
     return () => clearTimeout(timeout);
   }, [showControls, isPlaying]);
 
-  if (!video || !video.videoUrl) {
+  // ✅ Determine video source (uploaded OR external)
+  const videoSrc = video.filepath
+    ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/${video.filepath}`
+    : video.videoUrl || "";
+
+  if (!videoSrc) {
     return (
       <div className="aspect-video bg-black rounded-xl border border-border/20 flex items-center justify-center text-white font-medium">
         <div className="flex flex-col items-center gap-2">
@@ -49,7 +55,7 @@ export default function Videopplayer({ video, relatedVideos = [], onShowComments
     );
   }
 
-  const cleanUrl = video.videoUrl.replace(/"/g, "").trim();
+  const cleanUrl = videoSrc.replace(/"/g, "").trim();
 
   const togglePlay = () => {
     if (videoRef.current?.paused) {
