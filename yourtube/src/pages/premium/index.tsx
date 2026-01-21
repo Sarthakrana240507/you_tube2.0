@@ -40,8 +40,9 @@ const PremiumPage = () => {
         router.push("/");
       }
     } catch (error: any) {
-      console.error(error);
-      alert(error.response?.data?.message || "Upgrade failed. Check server connection.");
+      console.error("Upgrade Error Log:", error);
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5050";
+      alert(`Upgrade failed. \n\nConnecting to: ${backendUrl}\n\nReason: ${error.response?.data?.message || "Server unreachable. Please check if your backend is hosted and the URL is set in Vercel settings."}`);
     } finally {
       setUpgrading(null);
     }
