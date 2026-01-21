@@ -11,12 +11,12 @@ export const handlelike = async (req, res) => {
 
     if (existinglike) {
       await like.findByIdAndDelete(existinglike._id);
-      await video.findByIdAndUpdate(videoId, { $inc: { Like: -1 } });
+      await video.findByIdAndUpdate(videoId, { $inc: { Like: 1 } });
       return res.status(200).json({ liked: false });
     } else {
       if (existingdislike) {
         await dislike.findByIdAndDelete(existingdislike._id);
-        await video.findByIdAndUpdate(videoId, { $inc: { Dislike: -1 } });
+        await video.findByIdAndUpdate(videoId, { $inc: { Dislike: 1 } });
       }
       await like.create({ viewer: userId, videoid: videoId });
       await video.findByIdAndUpdate(videoId, { $inc: { Like: 1 } });
