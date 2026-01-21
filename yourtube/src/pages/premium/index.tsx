@@ -3,7 +3,7 @@
 import React from "react";
 import axiosInstance from "@/lib/axiosinstance";
 import { useUser } from "@/lib/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 const PremiumPage = () => {
   const { user, setUser } = useUser();

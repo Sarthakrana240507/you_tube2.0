@@ -13,7 +13,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { useUser } from "@/lib/AuthContext";
 import axiosInstance from "@/lib/axiosinstance";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 const VideoInfo = ({ video }: any) => {
   const { user, setUser } = useUser();
