@@ -8,10 +8,10 @@ export async function getUserLocation() {
   }
 
   try {
-    const res = await axios.get("https://ipapi.co/json/", { timeout: 5000 });
-    return res.data.region ?? null;
+    // Switch to a more reliable service for production CORS
+    const res = await axios.get("https://api.ipify.org?format=json", { timeout: 3000 });
+    return res.data.ip ? "detected" : null;
   } catch (err: any) {
-    // Silent catch for dev console cleanliness
     return null;
   }
 }
