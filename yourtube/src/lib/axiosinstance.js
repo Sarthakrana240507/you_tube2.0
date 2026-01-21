@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5050", // ✅ remove /api
-  timeout: 10000,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5050",
+  timeout: 60000, // ⏳ Increased to 60s for Render cold starts
   headers: { "Content-Type": "application/json" },
 });
 
