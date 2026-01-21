@@ -28,23 +28,12 @@ connectDB();
 const app = express();
 
 /* ===== Middleware ===== */
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:5050",
-  "https://you-tube2-0-oiej.vercel.app",
-];
-
+// 🚀 SUPER FIX: Open CORS for all origins to ensure Vercel works 100%
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow if it's in the list or if it's any vercel.app subdomain
-    if (!origin || allowedOrigins.indexOf(origin) !== -1 || origin.endsWith(".vercel.app")) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
+  origin: true,
+  credentials: true
 }));
+
 app.use(express.json({ limit: "30mb" }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
@@ -63,18 +52,9 @@ app.use("/like", likeroutes);
 app.use("/watch", watchlaterroutes);
 app.use("/history", historyroutes);
 app.use("/comment", commentroutes);
-
-// OTP API
 app.use("/otp", otproutes);
-
-// Download API
 app.use("/download", downloadRoutes);
-
-// Plan API
 app.use("/plan", planRoutes);
-
-// ✔ Important Fix → your login API is now available at:  POST /auth/login
-app.use("/auth", authRoutes);
 
 /* ===== 404 Handler ===== */
 app.use((req, res) => {
