@@ -3,6 +3,13 @@ import mongoose from "mongoose";
 const videoSchema = new mongoose.Schema(
   {
     title: String,
+    videotitle: String,
+    filename: String,
+    filepath: String,
+    filetype: String,
+    filesize: String,
+    videochanel: String,
+    uploader: String,
     description: String,
     videoUrl: String,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
