@@ -8,7 +8,7 @@ if (typeof window !== "undefined") {
 
 const axiosInstance = axios.create({
   baseURL: baseURL,
-  timeout: 60000,
+  timeout: 120000, // ⏳ Increased to 120s for Render cold starts
   headers: { "Content-Type": "application/json" },
 });
 
