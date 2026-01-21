@@ -83,7 +83,18 @@ const Header = () => {
       <div className="flex items-center gap-2">
         {user ? (
           <>
-            <Button variant="ghost" size="icon" className="p-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="p-2"
+              onClick={() => {
+                if (user?.channelname) {
+                  router.push(`/channel/${user._id}`);
+                } else {
+                  setisdialogeopen(true);
+                }
+              }}
+            >
               <VideoIcon className="w-6 h-6" />
             </Button>
             <Button variant="ghost" size="icon" className="p-2">
