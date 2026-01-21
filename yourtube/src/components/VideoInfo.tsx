@@ -43,8 +43,9 @@ const VideoInfo = ({ video }: any) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
-    setLikes(video?.Like || 0);
-    setDislikes(video?.Dislike || 0);
+    // Force reset negative values to zero
+    setLikes(Math.max(0, video?.Like || 0));
+    setDislikes(Math.max(0, video?.Dislike || 0));
     setShowFullDescription(false);
   }, [video]);
 
