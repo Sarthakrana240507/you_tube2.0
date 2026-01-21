@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5050";
+const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://you-tube2-0-vavh.onrender.com";
 
 if (typeof window !== "undefined") {
   console.log("🔗 API Connection: Currently attempting to reach server at ->", baseURL);

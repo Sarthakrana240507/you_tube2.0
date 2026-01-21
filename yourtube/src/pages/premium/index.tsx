@@ -45,7 +45,7 @@ const PremiumPage = () => {
       }
     } catch (error: any) {
       console.error("Upgrade Error Log:", error);
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5050";
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "https://you-tube2-0-vavh.onrender.com";
       alert(`Upgrade failed. \n\nConnecting to: ${backendUrl}\n\nReason: ${error.response?.data?.message || "Server unreachable. Please check if your backend is hosted and the URL is set in Vercel settings."}`);
     } finally {
       setUpgrading(null);
