@@ -1,9 +1,15 @@
 import express from "express";
+import mongoose from "mongoose";
 import Video from "../models/Video.js";
 import User from "../models/Auth.js";
-import mongoose from "mongoose";
+import upload from "../filehelper/filehelper.js";
+import { uploadvideo, getallvideo } from "../controllers/video.js";
 
 const router = express.Router();
+
+router.post("/upload", upload.single("file"), uploadvideo);
+router.get("/allvideos", getallvideo); // keeping this as an option
+
 
 /* =========================
    ADD VIDEO (Fixed)
