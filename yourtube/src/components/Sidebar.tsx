@@ -17,10 +17,12 @@ import React, { useState } from "react";
 import { Button } from "./ui/button";
 import Channeldialogue from "./channeldialogue";
 import { useAuth } from "@/lib/AuthContext";
+import { useRouter } from "next/router";
 
 const Sidebar = () => {
   const { user } = useAuth();
   const [isdialogeopen, setisdialogeopen] = useState(false);
+  const router = useRouter();
 
   return (
     <aside className="hidden lg:block w-64 h-[calc(100vh-56px)] overflow-y-auto p-2 bg-background text-foreground border-r border-border sticky top-14 custom-scrollbar">
@@ -98,6 +100,10 @@ const Sidebar = () => {
         </div>
 
         <div className="border-t border-border mt-4 pt-4 px-3 space-y-1">
+          <Button variant="ghost" className="w-full justify-start text-foreground hover:bg-secondary/80" onClick={() => router.push("/premium")}>
+            <Youtube className="w-5 h-5 mr-3 text-red-600" />
+            Premium
+          </Button>
           <Button variant="ghost" className="w-full justify-start text-foreground hover:bg-secondary/80">
             <Settings className="w-5 h-5 mr-3" />
             Settings
@@ -120,7 +126,7 @@ const Sidebar = () => {
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
       `}</style>
-    </aside>
+    </aside >
   );
 };
 

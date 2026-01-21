@@ -136,8 +136,10 @@ const Header = () => {
                 )}
 
                 <DropdownMenuItem asChild><Link href="/history">History</Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href="/downloads">Downloads</Link></DropdownMenuItem>
                 <DropdownMenuItem asChild><Link href="/liked">Liked videos</Link></DropdownMenuItem>
                 <DropdownMenuItem asChild><Link href="/watch-later">Watch later</Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link href="/premium" className="font-bold text-primary">Get Premium</Link></DropdownMenuItem>
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout} className="text-red-500">Sign out</DropdownMenuItem>

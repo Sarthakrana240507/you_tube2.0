@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/AuthContext";
 import { Play, Pause, RotateCcw, RotateCw, Volume2, VolumeX, Maximize, X } from "lucide-react";
+import { toast } from "sonner";
 
 interface VideoPlayerProps {
   video: {
@@ -84,7 +85,10 @@ export default function Videopplayer({ video, relatedVideos = [], onShowComments
 
       if (current >= limitSeconds) {
         videoRef.current.pause();
-        alert(`Limit reached for ${plan} plan. Upgrade to watch more!`);
+        toast.error(`Limit reached!`, {
+          description: `The ${plan} plan allows only ${Math.floor(limitSeconds / 60)} minutes per video. Upgrade for unlimited access!`,
+          duration: 5000,
+        });
         router.push("/premium");
       }
     }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axiosinstance";
 import { useUser } from "@/lib/AuthContext";
 import { PlayCircle, DownloadCloud, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 interface DownloadedVideo {
   _id: string;
@@ -75,7 +76,7 @@ const DownloadsPage = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {videos.map((v) => (
-            <div key={v._id} className="group relative flex flex-col bg-card rounded-2xl overflow-hidden border border-border/50 hover:shadow-2xl hover:border-primary/20 transition-all duration-300">
+            <Link key={v._id} href={`/watch/${v._id}`} className="group relative flex flex-col bg-card rounded-2xl overflow-hidden border border-border/50 hover:shadow-2xl hover:border-primary/20 transition-all duration-300">
               <div className="relative aspect-video bg-black overflow-hidden">
                 <video
                   src={v.videoUrl}
@@ -97,13 +98,13 @@ const DownloadsPage = () => {
                 </div>
 
                 <div className="flex justify-between items-center mt-4">
-                  <button className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
+                  <span className="text-xs font-bold text-primary hover:underline flex items-center gap-1">
                     Watch Now
-                  </button>
+                  </span>
                   <span className="text-[10px] text-muted-foreground uppercase tracking-widest">Downloaded</span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

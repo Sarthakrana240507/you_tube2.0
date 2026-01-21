@@ -64,12 +64,20 @@ const VideoInfo = ({ video }: any) => {
         userId: user._id,
       });
 
-      alert("Download successful!");
+      // TRIGGER ACTUAL FILE DOWNLOAD
+      const link = document.createElement("a");
+      link.href = video.videoUrl;
+      link.setAttribute("download", `${title}.mp4`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      alert("Download started and saved to your profile!");
 
       const updatedUser = {
         ...user,
         lastDownload: now.toISOString(),
-        downloads: [...(user.downloads || []), video._id],
+        downloads: [...(user.downloads || []), video], // Storing the full video object for immediate UI update
       };
 
       setUser(updatedUser);

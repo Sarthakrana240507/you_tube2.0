@@ -1,4 +1,7 @@
 import React, { useRef, useState } from "react";
+import { useUser } from "@/lib/AuthContext";
+import { toast } from "sonner";
+import { useRouter } from "next/router";
 
 interface Props {
   videoSrc: string;
@@ -9,8 +12,30 @@ interface Props {
 
 const CustomVideoPlayer = ({ videoSrc, onNextVideo, onShowComments, onCloseSite }: Props) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { user } = useUser();
+  const router = useRouter();
   const [tapTimeout, setTapTimeout] = useState<NodeJS.Timeout | null>(null);
   const [tapCount, setTapCount] = useState(0);
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      const current = videoRef.current.currentTime;
+      const plan = user?.plan || "Free";
+      let limitSeconds = Infinity;
+      if (plan === "Free") limitSeconds = 5 * 60;
+      else if (plan === "Bronze") limitSeconds = 7 * 60;
+      else if (plan === "Silver") limitSeconds = 10 * 60;
+
+      if (current >= limitSeconds) {
+        videoRef.current.pause();
+        toast.error(`Limit reached!`, {
+          description: `The ${plan} plan allows only ${Math.floor(limitSeconds / 60)} minutes per video. Upgrade for unlimited access!`,
+          duration: 5000,
+        });
+        router.push("/premium");
+      }
+    }
+  };
 
   const handleTap = (e: React.MouseEvent) => {
     const x = e.clientX;
@@ -56,6 +81,7 @@ const CustomVideoPlayer = ({ videoSrc, onNextVideo, onShowComments, onCloseSite 
         src={videoSrc}
         controls={false}
         autoPlay
+        onTimeUpdate={handleTimeUpdate}
         style={{ width: "100%", height: "100%", objectFit: "contain" }}
       />
     </div>
