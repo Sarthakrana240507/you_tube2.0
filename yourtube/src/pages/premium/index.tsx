@@ -32,7 +32,11 @@ const PremiumPage = () => {
       });
 
       if (res.data.plan) {
-        alert(`${planName} Plan Activated Successfully! \n\nCheck ${user.email} for your PDF invoice.`);
+        if (res.data.emailSent) {
+          alert(`${planName} Plan Activated Successfully! \n\nCheck ${user.email} for your PDF invoice.`);
+        } else {
+          alert(`${planName} Plan Activated! \n\n⚠️ INVOICE NOT SENT: ${res.data.emailMessage}`);
+        }
 
         const updatedUser = { ...user, isPremium: true, plan: res.data.plan };
         setUser(updatedUser);

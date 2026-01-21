@@ -182,18 +182,23 @@ router.post("/upgrade", async (req, res) => {
             // Don't fail the whole request just because PDF failed, but log it
         }
 
-        // Only attempt email if credentials exist
+        // EMAIL LOGIC
+        let emailSent = false;
+        let emailMessage = "Skipped";
+
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-            console.log(`Attempting to send email to ${user.email} using ${process.env.EMAIL_USER}...`);
+            console.log(`📧 Attempting to send invoice to ${user.email}...`);
             const transporter = nodemailer.createTransport({
-                service: "gmail",
+                host: "smtp.gmail.com",
+                port: 465,
+                secure: true,
                 auth: {
                     user: process.env.EMAIL_USER,
                     pass: process.env.EMAIL_PASS,
                 },
-                connectionTimeout: 10000, // 10s
-                greetingTimeout: 10000,   // 10s
-                socketTimeout: 10000      // 10s
+                connectionTimeout: 10000,
+                greetingTimeout: 10000,
+                socketTimeout: 10000
             });
 
             const mailOptions = {
@@ -201,19 +206,10 @@ router.post("/upgrade", async (req, res) => {
                 to: user.email,
                 subject: `Professional Invoice: YourTube ${newPlan} Upgrade`,
                 html: `
-                    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px;">
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <h1 style="color: #df0000; margin: 0;">YourTube Premium</h1>
-                            <p style="color: #666;">Upgrade Confirmation & Receipt</p>
-                        </div>
-                        <div style="padding: 20px; background: #fdfdfd; border-radius: 8px;">
-                            <p>Dear <strong>${user.name || "User"}</strong>,</p>
-                            <p>Your payment of <strong>₹${amount}</strong> was successful. Your account has been upgraded to the <strong>${newPlan} Plan</strong>.</p>
-                            <p>Please find the attached PDF invoice for your records.</p>
-                        </div>
-                        <div style="margin-top: 20px; font-size: 12px; color: #999; text-align: center;">
-                            <p>If you have any questions, contact billing@yourtube.com</p>
-                        </div>
+                    <div style="font-family: sans-serif; padding: 20px;">
+                        <h2>YourTube Invoice</h2>
+                        <p>Thank you, ${user.name}. Your plan is now <b>${newPlan}</b>.</p>
+                        <p>Total Paid: ₹${amount}</p>
                     </div>
                 `,
                 attachments: [
@@ -225,20 +221,25 @@ router.post("/upgrade", async (req, res) => {
             };
 
             try {
-                const info = await transporter.sendMail(mailOptions);
-                console.log(`✅ Email invoice sent: ${info.response}`);
+                await transporter.sendMail(mailOptions);
+                console.log("✅ Email sent successfully");
+                emailSent = true;
+                emailMessage = "Sent";
             } catch (mailError) {
                 console.error("❌ Failed to send email:", mailError);
+                emailMessage = "Failed: " + mailError.message;
             }
         } else {
-            console.warn("⚠️ EMAIL_USER/EMAIL_PASS not found in server/.env. Email skipped.");
+            console.warn("⚠️ EMAIL_USER/EMAIL_PASS not found.");
+            emailMessage = "Missing Credentials (configure Render Environment Variables)";
         }
 
         return res.status(200).json({
-            message: `Successfully upgraded to ${newPlan}`,
-            plan: newPlan,
-            invoiceSent: !!(process.env.EMAIL_USER && process.env.EMAIL_PASS),
-            user
+            message: "Plan upgraded successfully",
+            plan: user.plan,
+            isPremium: user.isPremium,
+            emailSent: emailSent,
+            emailMessage: emailMessage
         });
 
     } catch (error) {
