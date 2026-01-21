@@ -121,6 +121,9 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ message: "Video not found in database" });
     }
 
+    // SANITIZATION: Never allow negative numbers to reach the frontend
+    if (video.Like < 0) video.Like = 0;
+    if (video.Dislike < 0) video.Dislike = 0;
 
     video.videoUrl = video.videoUrl?.replace(/"/g, "").trim() || "";
 
