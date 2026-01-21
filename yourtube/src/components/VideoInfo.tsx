@@ -38,8 +38,8 @@ const VideoInfo = ({ video }: any) => {
     : "just now";
 
   /* ============== SYNC STATE ============== */
-  const [likes, setLikes] = useState<number>(video?.Like || 0);
-  const [dislikes, setDislikes] = useState<number>(video?.Dislike || 0);
+  const [likes, setLikes] = useState<number>(Math.max(0, video?.Like || 0));
+  const [dislikes, setDislikes] = useState<number>(Math.max(0, video?.Dislike || 0));
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
